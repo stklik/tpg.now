@@ -1,0 +1,11 @@
+{{yellow}}{{bold}}
+{% include 'logo' %}
+{{endbold}}{{endyellow}}
+
+
+{{ content | safe }}
+
+ {{bold}}{{yellow}}tpg.now by {{bgred}}@stklik {{endbgred}}{{endyellow}}{{endbold}}
+Follow for updates.
+
+{{ "\033[0m" }}

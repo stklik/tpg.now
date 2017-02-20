@@ -1,0 +1,21 @@
+tpg.now information
+{{ timestamp.strftime('%A %d.%m.%Y - %H:%M') }}
+Source : transports publics genevois (TPG), état en date du {{ timestamp.strftime('%d.%m.%Y') }}.
+{% if lines %}
+Today's operated lines are:
+{% for line in lines | sort %}{# -#}
+{{ "{:>2}".format(line.code) }} | {# -#}
+{% if loop.index is divisibleby(15) %}
+{% endif %}{# -#}
+{% endfor %}{# -#}
+{% endif %}
+
+{% if stops %}
+The operated stops are:
+{% for stop in stops | sort %}{# -#}
+{{ "{:23}".format(stop.__str__()) }}{# -#}
+{% if loop.index is divisibleby(5) %}
+{% else %}│ {# -#}
+{% endif %}{# -#}
+{% endfor %}{# -#}
+{% endif %}

@@ -1,0 +1,28 @@
+{{reverse_video}}{{bold}} tpg.now {{endbold}}{{endreverse_video}}
+tpg.now is an app that shows live data for the Geneva Public Transport system.
+(the data is provided by TPG itself, the correctness lies in their hands)
+
+
+{{reverse_video}}Usage:{{endreverse_video}}
+Add filters and choices separated by slashes ('/')
+e.g. {{url}}/arg1/arg2/arg3
+
+
+{{reverse_video}}Arguments:{{endreverse_video}}
+/[stop]             enter ONE stop name or code for which you want the departures
+                    find stop names and codes on {{url}}/info/stops
+                    e.g. {{url}}/Cornavin or {{url}}/AERO
+/[stop]/[line]      optionally add one or more line codes to filter
+                    e.g. {{url}}/CERN/18/Y to filter lines 18 and Y
+/compact            switches to compact output format
+/times              displays the departure times, rather than waiting time
+
+/info               get info about the lines and stops operated today
+/info/stops         same as /info but only displays stop information
+/info/lines         same as /info but only displays line information
+
+/help               display this message
+
+
+{{reverse_video}}Hint:{{endreverse_video}}
+Try using it from CLI with curl

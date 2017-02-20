@@ -1,0 +1,87 @@
+<html>
+  <head>
+  <style>
+      * {
+          background-color: black;
+          color: white;
+          font-size: 95%;
+          font-family: "DejaVu Sans Mono", Menlo, "Lucida Sans Typewriter", "Lucida Console", monaco, "Bitstream Vera Sans Mono", monospace;
+      }
+      .logo {
+        color: yellow;
+      }
+
+      .bold           { font-weight: bold; }
+      .underscore     { text-decoration: underline; }
+      .blink          { opacity: 0; animation: blinking 1s linear infinite; }
+      .reverse_video  { filter: invert(100%);
+                        -webkit-filter: invert(100%); }
+      .concealed      {}  // not supportedbg
+
+      .black   { color: black; }
+      .red     { color: red; }
+      .green   { color: green; }
+      .yellow  { color: yellow; }
+      .blue    { color: blue; }
+      .magenta { color: magenta; }
+      .cyan    { color: cyan; }
+      .white   { color: white; }
+
+      .bgblack   { background-color: black; }
+      .bgred     { background-color: red; }
+      .bggreen   { background-color: green; }
+      .bgyellow  { background-color: yellow; }
+      .bgblue    { background-color: blue; }
+      .bgmagenta { background-color: magenta; }
+      .bgcyan    { background-color: cyan; }
+      .bgwhite   { background-color: white; }
+
+
+
+
+        @keyframes blinking {
+          from,
+          49.9% {
+            opacity: 0;
+          }
+          50%,
+          to {
+            opacity: 1;
+          }
+        }
+      </style>
+  </head>
+  <body>
+    <p class="logo">
+      {% filter toHtml %}
+{% include 'logo' %}
+      {% endfilter %}
+    </p>
+    <p>
+    {{ content | toHtml | safe }}
+    </p>
+    <p>
+      <a class="twitter-follow-button" href="https://twitter.com/stklik" data-show-count="false">Follow @stklik</a>
+      <a class="github-button" href="https://github.com/stklik" aria-label="Follow @stklik on GitHub">Follow @stklik</a>
+      <a class="github-button" href="https://github.com/stklik/tpg.now" data-icon="octicon-star" aria-label="Star stklik/tpg.now on GitHub">tpg.now</a>
+    </p>
+    <script>window.twttr = (function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0],
+        t = window.twttr || {};
+      if (d.getElementById(id)) return t;
+      js = d.createElement(s);
+      js.id = id;
+      js.src = "https://platform.twitter.com/widgets.js";
+      fjs.parentNode.insertBefore(js, fjs);
+
+      t._e = [];
+      t.ready = function(f) {
+        t._e.push(f);
+      };
+
+      return t;
+    }(document, "script", "twitter-wjs"));</script>
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  </body>
+</html>

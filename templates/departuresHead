@@ -1,0 +1,7 @@
+Departures from {{stop.name}} within the next hour
+(max {{maxDepartures}} departures per destination)
+{{TPG_disclaimer}}
+
+Time now: {{timestamp.strftime("%H:%M")}}
+Stopname: {{stop.name}}
+Stopcode: {{stop.code}}
