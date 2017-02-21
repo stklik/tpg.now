@@ -1,4 +1,4 @@
-tpg.now
+tpg.now [![Build Status](https://travis-ci.org/stklik/tpg.now.svg?branch=master)](https://travis-ci.org/stklik/tpg.now)
 ===
 by [@stklik](http://twitter.com/stklik)
 
