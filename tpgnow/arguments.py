@@ -39,6 +39,8 @@ class Arguments(object):
 
     def getStopFromString(self, candidate):
         normalizedCandidate = Stop.normalizeStopName(candidate)
+        if not Tpg.getTodaysStops():
+            return None
 
         for stop in Tpg.getTodaysStops():
             if candidate.upper() == stop.code:
