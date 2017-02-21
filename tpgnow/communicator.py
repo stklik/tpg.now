@@ -86,7 +86,7 @@ class Communicator(object):
             self.logger.info("Got a response after try #%s" % tries)
             return response.decode('utf-8')
         else:
-            self.logger.error("No response after %s tries" % tries)
+            self.logger.error("No response after %s tries to contact the server" % tries)
             return None
 
     def sendRequest_withCounter(self, url):
