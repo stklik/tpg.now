@@ -1,11 +1,12 @@
 <html>
   <head>
+    <meta name="viewport" content="width=device-width" />
   <style>
       * {
           background-color: black;
           color: white;
-          font-size: 95%;
-          font-family: "DejaVu Sans Mono", Menlo, "Lucida Sans Typewriter", "Lucida Console", monaco, "Bitstream Vera Sans Mono", monospace;
+          font-size: 100%;
+          font-family: monospace,monospace;
       }
       .logo {
         color: yellow;
@@ -52,14 +53,14 @@
       </style>
   </head>
   <body>
-    <p class="logo">
+    <pre class="logo">
       {% filter toHtml %}
 {% include 'logo' %}
       {% endfilter %}
-    </p>
-    <p>
+    </pre>
+    <pre>
     {{ content | toHtml | safe }}
-    </p>
+  </pre>
     <p>
       <a class="twitter-follow-button" href="https://twitter.com/stklik" data-show-count="false">Follow @stklik</a>
       <a class="github-button" href="https://github.com/stklik" aria-label="Follow @stklik on GitHub">Follow @stklik</a>
