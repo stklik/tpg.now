@@ -1,6 +1,7 @@
 from .arguments import Arguments
 from .uiwriter import UiWriter, HtmlWriter, CLIFormatter, HtmlFormatter
 from .tpg import Tpg
+from config import Config
 
 from datetime import datetime
 from flask import render_template
@@ -64,7 +65,7 @@ class Server(object):
         else:
             formatting = HtmlFormatter.getAsDict()
             template = env.get_template("base.html")
-            rendered = template.render(content=response)
+            rendered = template.render(content=response, google_analytics=Config().google_analytics)
 
             formatTemp = Template(rendered)
             return formatTemp.render(**formatting)

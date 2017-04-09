@@ -151,7 +151,7 @@ class HtmlWriter(object):
             elif inCurlyBrackets:
                 content += c
             elif c == " ":
-                content += "&nbsp;"
+                content += " "
             elif c == "\n":
                 content += "<br />"
             else:
