@@ -1,3 +1,4 @@
+import os
 from .arguments import Arguments
 from .uiwriter import UiWriter, HtmlWriter, CLIFormatter, HtmlFormatter
 from .tpg import Tpg
@@ -65,7 +66,7 @@ class Server(object):
         else:
             formatting = HtmlFormatter.getAsDict()
             template = env.get_template("base.html")
-            rendered = template.render(content=response, google_analytics=Config().google_analytics)
+            rendered = template.render(content=response, google_analytics=os.getenv("GOOGLE_ANALYTICS", Config.google_analytics))
 
             formatTemp = Template(rendered)
             return formatTemp.render(**formatting)
