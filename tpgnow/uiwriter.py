@@ -116,7 +116,7 @@ class UiWriter(object):
             table.inner_heading_row_border = False
             table.inner_row_border = False
             table.outer_border = False
-            linesText = "\n\nToday's operated lines are:\n"+table.table
+            linesText = "\n\nToday's operated lines are:\n\n"+table.table
 
         stopsText = ""
         if lines:
@@ -128,7 +128,7 @@ class UiWriter(object):
             table.inner_row_border = False
             table.outer_border = False
             table.column_widths = [27]*4
-            stopsText = "\n\nToday's operated stops are:\n"+table.table
+            stopsText = "\n\nToday's operated stops are:\n\n"+table.table
 
         return head + linesText + stopsText
 
