@@ -56,7 +56,7 @@ class TestCommunicator(object):
 
         comm = Communicator(maxRequestsPerDay=20)
         assert comm.sendRequest_withCounter("someUrl") == "ServerResponse"
-        mock_urlopen.assert_called_once()
+        assert mock_urlopen.call_count == 1 #assert_called_once()
 
     @patch("tpgnow.communicator.urlopen")
     def test_maxRequests_maximumIsZero(self, mock_urlopen):
@@ -66,7 +66,7 @@ class TestCommunicator(object):
         comm = Communicator(maxRequestsPerDay=0)
         with pytest.raises(ApiLimitException):
             comm.sendRequest_withCounter("someUrl")
-        mock_urlopen.assert_not_called()
+        assert mock_urlopen.call_count == 0
 
     @patch("tpgnow.communicator.urlopen")
     def test_maxRequests_maximumIsOne_twoRequests_shouldThrowException(self, mock_urlopen):
@@ -77,7 +77,7 @@ class TestCommunicator(object):
         with pytest.raises(ApiLimitException):
             comm.sendRequest_withCounter("someUrl")
             comm.sendRequest_withCounter("someUrl")
-        mock_urlopen.assert_called_once()
+        assert mock_urlopen.call_count == 1
 
     @patch("tpgnow.communicator.urlopen")
     def test_maxRequests_tooManyRequestsYesterday_shouldWorkToday(self, mock_urlopen):
@@ -89,6 +89,6 @@ class TestCommunicator(object):
         comm.currentCount = 5
         comm.counterDate = datetime.today() - timedelta(1)
         assert comm.sendRequest_withCounter("someUrl") == "ServerResponse"
-        mock_urlopen.assert_called_once()
+        assert mock_urlopen.call_count == 1
         assert comm.counterDate == datetime.today().date()
         assert comm.currentCount == 1
