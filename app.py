@@ -17,36 +17,42 @@ Communicator.Instance().apiKey = os.getenv("API_KEY", Config.apiKey)
 
 server = Server()
 
+def _get_agent_and_baseurl(request):
+    agent = request.headers.get('User-Agent')
+    baseurl = request.headers.get('Host')
+    url = request.url
+    print(url)
+    return {"agent" : agent, "baseurl": baseurl, "url": url}
+
 @app.route('/help')
 def help():
-    baseurl = request.headers.get('Host')
-    response = server.getHelp(baseurl)
-    agent = request.headers.get('User-Agent')
-    return server.reply(response, agent)
+    requestArgs = _get_agent_and_baseurl(request)
+    response = server.getHelp(**requestArgs)
+    return server.reply(response, **requestArgs)
 
 @app.route('/info')
 def info():
-    response = server.getInfo()
-    agent = request.headers.get('User-Agent')
-    return server.reply(response, agent)
+    requestArgs = _get_agent_and_baseurl(request)
+    response = server.getInfo(**requestArgs)
+    return server.reply(response, **requestArgs)
 
 @app.route('/info/lines')
 def infoLines():
-    response = server.getLineInfo()
-    agent = request.headers.get('User-Agent')
-    return server.reply(response, agent)
+    requestArgs = _get_agent_and_baseurl(request)
+    response = server.getLineInfo(**requestArgs)
+    return server.reply(response, **requestArgs)
 
 @app.route('/info/stops')
 def infoStops():
-    response = server.getStopInfo()
-    agent = request.headers.get('User-Agent')
-    return server.reply(response, agent)
+    requestArgs = _get_agent_and_baseurl(request)
+    response = server.getStopInfo(**requestArgs)
+    return server.reply(response, **requestArgs)
 
 @app.route('/<path:path>')
 def filtered(path):
-    response = server.getDepartures(path)
-    agent = request.headers.get('User-Agent')
-    return server.reply(response, agent)
+    requestArgs = _get_agent_and_baseurl(request)
+    response = server.getDepartures(path, **requestArgs)
+    return server.reply(response, **requestArgs)
 
 @app.route('/')
 def home():

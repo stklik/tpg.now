@@ -18,40 +18,33 @@ CLI_AGENTS = ['curl']
 
 class Server(object):
 
-    def getHelp(self, baseurl):
+    def getHelp(self, **kwargs):
         template = env.get_template('help')
-        return template.render(url=baseurl)
+        return template.render(url=kwargs.get("baseurl", None))
 
-    def getInfo(self):
+    def getInfo(self, **kwargs):
         stops = Tpg.getTodaysStops()
         lines = Tpg.getTodaysLines()
+        return UiWriter().info(stops=stops, lines=lines)
 
-        template = env.get_template("info")
-        rendered = template.render(stops=stops, lines=lines, timestamp=datetime.now())
-        return rendered
-
-    def getLineInfo(self):
+    def getLineInfo(self, **kwargs):
         lines = Tpg.getTodaysLines()
+        return UiWriter().info(lines=lines)
 
-        template = env.get_template("info")
-        rendered = template.render(lines=lines, timestamp=datetime.now())
-        return rendered
-
-    def getStopInfo(self):
+    def getStopInfo(self, **kwargs):
         stops = Tpg.getTodaysStops()
+        return UiWriter().info(stops=stops)
 
-        template = env.get_template("info")
-        rendered = template.render(stops=stops, timestamp=datetime.now())
-        return rendered
-
-    def getDepartures(self, argString):
+    def getDepartures(self, argString, **kwargs):
         args = Arguments(argString).parse()
         stop, departures = Tpg.getNextDeparturesForStop(args)
-        return UiWriter().writeDepartures(stop, departures, compact=args.compact, asTimes=args.times)
+        return_html = not self.is_CLI_agent(kwargs.get("agent", None))
+        url = kwargs.get("url", None)
+        return UiWriter(html=return_html).writeDepartures(stop, departures, url=url, compact=args.compact, asTimes=args.times)
 
 
-    def reply(self, response, agent):
-        if any(name in agent for name in CLI_AGENTS):  # are we called from CLI
+    def reply(self, response, **kwargs):
+        if self.is_CLI_agent(kwargs.get("agent", None)):  # are we called from CLI
             formatting = CLIFormatter.getAsDict()
 
             # first pass: assemble
@@ -69,3 +62,6 @@ class Server(object):
 
             formatTemp = Template(rendered)
             return formatTemp.render(**formatting)
+
+    def is_CLI_agent(self, agent):
+        return any(name in agent for name in CLI_AGENTS)

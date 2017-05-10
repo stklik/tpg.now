@@ -2,6 +2,7 @@ from flask import render_template
 from datetime import datetime
 from enum import Enum
 from jinja2 import Environment, FileSystemLoader, DebugUndefined, Template
+from tpgnow.singletable import SingleTableUnescaped
 
 env = Environment(
     loader=FileSystemLoader("./templates"),
@@ -98,10 +99,44 @@ CLI_AGENTS = ['curl']  # to be extended
 
 class UiWriter(object):
 
+    def __init__(self, html=False):
+        self.html = html
+
+    def info(self, stops=None, lines=None):
+        now = datetime.now()
+        head = "tpg.now information\n%s\n" % now.strftime('%A %d.%m.%Y - %H:%M') + \
+               "Source : transports publics genevois (TPG)" + \
+               ", état en date du %s" % now.strftime('%d.%m.%Y')
+
+        linesText = ""
+        if lines:
+            data = [[line.code for line in sorted(lines)[i:i + 15]]
+                        for i in range(0, len(lines), 15)]
+            table = SingleTableUnescaped(data)
+            table.inner_heading_row_border = False
+            table.inner_row_border = False
+            table.outer_border = False
+            linesText = "\n\nToday's operated lines are:\n"+table.table
+
+        stopsText = ""
+        if lines:
+            data = [[str(stop) for stop in sorted(stops)[i:i + 4]]
+                        for i in range(0, len(stops), 4)]
+            data.insert(0, ["(CODE) Stopname"]*4)
+            table = SingleTableUnescaped(data)
+            table.inner_heading_row_border = True
+            table.inner_row_border = False
+            table.outer_border = False
+            table.column_widths = [27]*4
+            stopsText = "\n\nToday's operated stops are:\n"+table.table
+
+        return head + linesText + stopsText
+
+
     """
     D E P A R T U R E S
     """
-    def writeDepartures(self, stop, departures, compact=False, asTimes=False):
+    def writeDepartures(self, stop, departures, compact=False, asTimes=False, url=None):
         template = env.get_template("departuresHead")
         intro = template.render(stop=stop, maxDepartures=MAX_DEPARTURES_SHOWN, TPG_disclaimer=TPG_MESSAGE, timestamp=datetime.now())
 
@@ -112,15 +147,31 @@ class UiWriter(object):
 
         lineinfo = ""
         if compact:
-            template = env.get_template("departuresCompact")
-            lineinfo = template.render(linesToDeps=linesToDeps, asTimes=asTimes, maxDepartures=MAX_DEPARTURES_SHOWN)
+            data = [
+                [str(line), " ".join([dep.formattedTime(asTimes) for dep in deps[:MAX_DEPARTURES_SHOWN]])]
+                 for line, deps in linesToDeps.items()]
+            table = SingleTableUnescaped(data)
+            table.inner_heading_row_border = False
+            table.inner_row_border = True
+            table.column_widths = [23,93]
+            lineinfo = table.table
+
         else:
             lineinfo = self.writeDeparturesFancy(linesToDeps, asTimes)
 
         if not lineinfo.strip():
             lineinfo = "{{red}}No departures from this stop within the next hour !{{endred}}"
 
-        return intro +"\n\n"+ lineinfo
+        change_to_other = ""
+        if self.html:
+            if asTimes:
+                link_url = url.replace("/times", "")
+                change_to_other += """<p><a href='%s'>Display as waiting times</a></p>""" % link_url
+            else:
+                link_url = url.lstrip("/") + "/times"
+                change_to_other += """<p><a href='%s'>Display as waiting times</a></p>""" % link_url
+
+        return intro +"\n\n"+ change_to_other + lineinfo
 
 
     def writeDeparturesFancy(self, linesToDeps, asTimes=False):
@@ -130,8 +181,15 @@ class UiWriter(object):
 
         renderings = []
         for key in sorted(groupedByLineCode.keys()):
-            template = env.get_template("departuresFancy")
-            renderings.append(template.render(code=key, linesToDeps=groupedByLineCode[key], asTimes=asTimes, maxDepartures=MAX_DEPARTURES_SHOWN))
+            data = [
+                [str(line.destination), " ".join([dep.formattedTime(asTimes) for dep in deps[:MAX_DEPARTURES_SHOWN]])]
+                 for line, deps in groupedByLineCode[key].items()]
+
+            table = SingleTableUnescaped(data, title=key)
+            table.inner_heading_row_border = False
+            table.column_widths = [23,93]
+            renderings.append(table.table)
+
 
         return "\n".join(renderings)
 
