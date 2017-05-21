@@ -122,13 +122,23 @@ class UiWriter(object):
         if stops:
             data = [[str(stop) for stop in sorted(stops)[i:i + 4]]
                         for i in range(0, len(stops), 4)]
+
             data.insert(0, ["(CODE) Stopname"]*4)
             table = SingleTableUnescaped(data)
             table.inner_heading_row_border = True
             table.inner_row_border = False
             table.outer_border = False
             table.column_widths = [27]*4
-            stopsText = "\n\nToday's operated stops are:\n\n"+table.table
+
+            tableText = table.table
+            if self.html:
+                print("a")
+                for stop in stops:
+                    tableText = tableText.replace(str(stop),
+                        "<a href='/%s' class='no_decoration'>%s</a>" % (stop.code, "{}".format(str(stop))))
+                print("b")
+
+            stopsText = "\n\nToday's operated stops are:\n\n"+tableText
 
         return head + linesText + stopsText
 

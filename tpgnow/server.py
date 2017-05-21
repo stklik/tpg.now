@@ -24,17 +24,20 @@ class Server(object):
         return template.render(url=kwargs.get("baseurl", None))
 
     def getInfo(self, **kwargs):
+        return_html = not self.is_CLI_agent(kwargs.get("agent", None))
         stops = Tpg.getTodaysStops()
         lines = Tpg.getTodaysLines()
-        return UiWriter().info(stops=stops, lines=lines)
+        return UiWriter(return_html).info(stops=stops, lines=lines)
 
     def getLineInfo(self, **kwargs):
+        return_html = not self.is_CLI_agent(kwargs.get("agent", None))
         lines = Tpg.getTodaysLines()
-        return UiWriter().info(lines=lines)
+        return UiWriter(return_html).info(lines=lines)
 
     def getStopInfo(self, **kwargs):
+        return_html = not self.is_CLI_agent(kwargs.get("agent", None))
         stops = Tpg.getTodaysStops()
-        return UiWriter().info(stops=stops)
+        return UiWriter(return_html).info(stops=stops)
 
     def getDepartures(self, argString, **kwargs):
         args = Arguments(argString).parse()
