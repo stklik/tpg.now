@@ -132,11 +132,9 @@ class UiWriter(object):
 
             tableText = table.table
             if self.html:
-                print("a")
                 for stop in stops:
                     tableText = tableText.replace(str(stop),
                         "<a href='/%s' class='no_decoration'>%s</a>" % (stop.code, "{}".format(str(stop))))
-                print("b")
 
             stopsText = "\n\nToday's operated stops are:\n\n"+tableText
 
