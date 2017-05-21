@@ -119,7 +119,7 @@ class UiWriter(object):
             linesText = "\n\nToday's operated lines are:\n\n"+table.table
 
         stopsText = ""
-        if lines:
+        if stops:
             data = [[str(stop) for stop in sorted(stops)[i:i + 4]]
                         for i in range(0, len(stops), 4)]
             data.insert(0, ["(CODE) Stopname"]*4)
