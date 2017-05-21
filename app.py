@@ -31,21 +31,18 @@ def help():
     return server.reply(response, **requestArgs)
 
 @app.route('/info')
-def info():
+@app.route('/info/')
+@app.route('/info/<path>')
+def info(path=None):
     requestArgs = _get_agent_and_baseurl(request)
-    response = server.getInfo(**requestArgs)
-    return server.reply(response, **requestArgs)
-
-@app.route('/info/lines')
-def infoLines():
-    requestArgs = _get_agent_and_baseurl(request)
-    response = server.getLineInfo(**requestArgs)
-    return server.reply(response, **requestArgs)
-
-@app.route('/info/stops')
-def infoStops():
-    requestArgs = _get_agent_and_baseurl(request)
-    response = server.getStopInfo(**requestArgs)
+    response = ""
+    if path == "stops":
+        "fetching"
+        response = server.getStopInfo(**requestArgs)
+    elif path == "lines":
+        response = server.getLineInfo(**requestArgs)
+    else:
+        response = server.getInfo(**requestArgs)
     return server.reply(response, **requestArgs)
 
 @app.route('/<path:path>')
